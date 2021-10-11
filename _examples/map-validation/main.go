@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-playground/validator/v10"
+	"github.com/nocalhost/validator/v10"
 )
 
 var validate *validator.Validate

@@ -156,6 +156,8 @@ type FieldError interface {
 	// calling fe.Error()
 	Translate(ut ut.Translator) string
 
+	Msg() string
+
 	// Error returns the FieldError's message
 	Error() string
 }
@@ -179,6 +181,7 @@ type fieldError struct {
 	param          string
 	kind           reflect.Kind
 	typ            reflect.Type
+	msg            string
 }
 
 // Tag returns the validation tag that failed.
@@ -247,6 +250,10 @@ func (fe *fieldError) Kind() reflect.Kind {
 // Type returns the Field's reflect Type
 func (fe *fieldError) Type() reflect.Type {
 	return fe.typ
+}
+
+func (fe *fieldError) Msg() string {
+	return fe.msg
 }
 
 // Error returns the fieldError's error message
