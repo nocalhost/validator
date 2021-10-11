@@ -23,25 +23,43 @@ import (
 	urn "github.com/leodido/go-urn"
 )
 
+type MsgFunc func(fl FieldLevel) string
+
 // Func accepts a FieldLevel interface for all validation needs. The return
 // value should be true when validation succeeds.
 type Func func(fl FieldLevel) bool
 
 // FuncCtx accepts a context.Context and FieldLevel interface for all
 // validation needs. The return value should be true when validation succeeds.
-type FuncCtx func(ctx context.Context, fl FieldLevel) bool
+type FuncCtx func(ctx context.Context, fl FieldLevel) string
+
+func wrapMsgFunc(fn MsgFunc) FuncCtx {
+	if fn == nil {
+		return nil // be sure not to wrap a bad function.
+	}
+	return func(ctx context.Context, fl FieldLevel) string {
+		return fn(fl)
+	}
+}
 
 // wrapFunc wraps noramal Func makes it compatible with FuncCtx
 func wrapFunc(fn Func) FuncCtx {
 	if fn == nil {
 		return nil // be sure not to wrap a bad function.
 	}
-	return func(ctx context.Context, fl FieldLevel) bool {
-		return fn(fl)
+	return func(ctx context.Context, fl FieldLevel) string {
+		b := fn(fl)
+		if b {
+			return ""
+		} else {
+			return UndefinedMsg
+		}
 	}
 }
 
 var (
+	UndefinedMsg = "Hint for this validation tag is not defined yet"
+
 	restrictedTags = map[string]struct{}{
 		diveTag:           {},
 		keysTag:           {},

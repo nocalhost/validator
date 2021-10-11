@@ -199,6 +199,15 @@ func (v *Validate) RegisterValidation(tag string, fn Func, callValidationEvenIfN
 	return v.RegisterValidationCtx(tag, wrapFunc(fn), callValidationEvenIfNull...)
 }
 
+// RegisterValidation adds a validation with the given tag
+//
+// NOTES:
+// - if the key already exists, the previous validation function will be replaced.
+// - this method is not thread-safe it is intended that these all be registered prior to any validation
+func (v *Validate) RegisterValidationWithErrorMsg(tag string, fn MsgFunc, callValidationEvenIfNull ...bool) error {
+	return v.RegisterValidationCtx(tag, wrapMsgFunc(fn), callValidationEvenIfNull...)
+}
+
 // RegisterValidationCtx does the same as RegisterValidation on accepts a FuncCtx validation
 // allowing context.Context validation support.
 func (v *Validate) RegisterValidationCtx(tag string, fn FuncCtx, callValidationEvenIfNull ...bool) error {

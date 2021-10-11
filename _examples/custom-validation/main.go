@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/go-playground/validator/v10"
+	"github.com/nocalhost/validator/v10"
 )
 
 // MyStruct ..
@@ -17,7 +17,7 @@ var validate *validator.Validate
 func main() {
 
 	validate = validator.New()
-	validate.RegisterValidation("is-awesome", ValidateMyVal)
+	validate.RegisterValidationWithErrorMsg("is-awesome", ValidateMyVal)
 
 	s := MyStruct{String: "awesome"}
 
@@ -34,6 +34,6 @@ func main() {
 }
 
 // ValidateMyVal implements validator.Func
-func ValidateMyVal(fl validator.FieldLevel) bool {
-	return fl.Field().String() == "awesome"
+func ValidateMyVal(fl validator.FieldLevel) string {
+	return "awesome"
 }

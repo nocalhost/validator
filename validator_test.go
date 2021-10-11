@@ -6559,8 +6559,8 @@ func TestAddFunctions(t *testing.T) {
 		return true
 	}
 
-	fnCtx := func(ctx context.Context, fl FieldLevel) bool {
-		return true
+	fnCtx := func(ctx context.Context, fl FieldLevel) string {
+		return ""
 	}
 
 	validate := New()
@@ -9009,9 +9009,9 @@ func TestFieldLevelName(t *testing.T) {
 func TestValidateStructRegisterCtx(t *testing.T) {
 	var ctxVal string
 
-	fnCtx := func(ctx context.Context, fl FieldLevel) bool {
+	fnCtx := func(ctx context.Context, fl FieldLevel) string {
 		ctxVal = ctx.Value(&ctxVal).(string)
-		return true
+		return ""
 	}
 
 	var ctxSlVal string
